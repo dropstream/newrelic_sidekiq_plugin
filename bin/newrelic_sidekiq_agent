@@ -1,0 +1,22 @@
+#! /usr/bin/env ruby
+
+require "rubygems"
+require "bundler/setup"
+require "#{File.expand_path('../../',__FILE__)}/lib/newrelic_sidekiq_agent"
+
+module SidekiqAgent
+
+  #
+  # Register this agent with the component.
+  # The ExampleAgent is the name of the module that defines this
+  # driver (the module must contain at least three classes - a
+  # PollCycle, a Metric and an Agent class, as defined above).
+  #
+  NewRelic::Plugin::Setup.install_agent :sidekiq, SidekiqAgent
+
+  #
+  # Launch the agent; this never returns.
+  #
+  NewRelic::Plugin::Run.setup_and_run
+
+end
