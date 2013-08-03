@@ -9,7 +9,7 @@ Sidekiq 2.13.0
 
 ## Installation
 
-    gem install newrelic_sidekiq_agent
+    gem install newrelic_sidekiq_plugin
     
 ## Getting Started
 
