@@ -5,7 +5,6 @@ require "newrelic_plugin"
 require "sidekiq"
 
 module SidekiqAgent
-
   class Agent < NewRelic::Plugin::Agent::Base
 
     agent_guid "com.getdropstream.sidekiq"
@@ -50,18 +49,4 @@ module SidekiqAgent
     end
 
   end
-
-  #
-  # Register this agent with the component.
-  # The ExampleAgent is the name of the module that defines this
-  # driver (the module must contain at least three classes - a
-  # PollCycle, a Metric and an Agent class, as defined above).
-  #
-  NewRelic::Plugin::Setup.install_agent :sidekiq, SidekiqAgent
-
-  #
-  # Launch the agent; this never returns.
-  #
-  NewRelic::Plugin::Run.setup_and_run
-
 end
