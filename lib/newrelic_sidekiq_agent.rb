@@ -8,7 +8,7 @@ module SidekiqAgent
   class Agent < NewRelic::Plugin::Agent::Base
 
     agent_guid "com.getdropstream.sidekiq"
-    agent_version "0.0.1"
+    agent_version "0.0.2"
     agent_config_options :queue
     agent_human_labels("Sidekiq Agent") { ident }
     
@@ -33,6 +33,16 @@ module SidekiqAgent
       report_metric "Jobs/Pending", "Jobs", stats.enqueued
       
       #
+      # Total # of jobs failed
+      #
+      report_metric "Jobs/Failed", "Jobs", stats.failed
+      
+      #
+      # Total # of jobs processed
+      #
+      report_metric 'Jobs/Processed', "Jobs", stats.processed
+      
+      #
       # The rate at which jobs are processed per second
       #
       report_metric "Jobs/Rate/Processed", "Jobs/Second", @processed.process(stats.processed)
@@ -41,11 +51,6 @@ module SidekiqAgent
       # The rate at which jobs failed per second
       #
       report_metric "Jobs/Rate/Failed", "Jobs/Second", @total_failed.process(stats.failed)
-      
-      #
-      # Total # of jobs failed
-      #
-      report_metric "Jobs/Failed", "Jobs", stats.failed
     end
 
   end
