@@ -61,7 +61,7 @@ This is the New Relic plugin for monitoring Sidekiq developed by Falconer Develo
     bin/newrelic_sidekiq_agent
     config/newrelic_plugin.yml.example
     lib/newrelic_sidekiq_agent.rb
-    newrelic_sidekiq_agent.gemspec
+    newrelic_sidekiq_plugin.gemspec
   ]
   # = MANIFEST =
 
