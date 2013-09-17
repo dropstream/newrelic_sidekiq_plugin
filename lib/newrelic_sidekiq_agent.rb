@@ -8,7 +8,7 @@ module SidekiqAgent
   class Agent < NewRelic::Plugin::Agent::Base
 
     agent_guid "com.getdropstream.sidekiq"
-    agent_version "0.0.2"
+    agent_version "0.0.3"
     agent_config_options :queue
     agent_human_labels("Sidekiq Agent") { ident }
     
@@ -21,6 +21,20 @@ module SidekiqAgent
         
     def poll_cycle
       stats = Sidekiq::Stats.new
+      
+      Sidekiq::Queue.all.unshift(Sidekiq::Queue.new).each do |sidekiq_queue|
+        
+        #
+        # Report the # of jobs in a given queue
+        #
+        report_metric "Queue/Length(#{sidekiq_queue.name})", "Jobs", sidekiq_queue.size
+        
+        #
+        # Report the latency of a given queue
+        # Queue latency is the difference between when the oldest job was pushed onto the queue versus the current time.
+        #
+        report_metric "Queue/Latency(#{sidekiq_queue.name})", "Seconds", sidekiq_queue.latency
+      end
       
       # 
       # The # of worker executing a job 
