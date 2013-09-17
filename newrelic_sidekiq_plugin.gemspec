@@ -45,6 +45,7 @@ This is the New Relic plugin for monitoring Sidekiq developed by Falconer Develo
   ## LICENSE files to the extra_rdoc_files list.
   s.rdoc_options = ["--charset=UTF-8"]
   s.extra_rdoc_files = %w[README.md]
+  s.license     = 'MIT'
 
   ## List your runtime dependencies here. Runtime dependencies are those
   ## that are needed for an end user to actually USE your code.  
