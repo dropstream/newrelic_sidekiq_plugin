@@ -7,21 +7,32 @@ require "sidekiq"
 module SidekiqAgent
   class Agent < NewRelic::Plugin::Agent::Base
 
+
     agent_guid "com.getdropstream.sidekiq"
-    agent_version "0.0.3"
-    agent_config_options :queue
-    agent_human_labels("Sidekiq Agent") { ident }
+    agent_version "0.0.4"
+    agent_config_options :namespace, :url
+    agent_human_labels("Sidekiq Agent") { "Sidekiq Agent" }
     
     attr_reader :ident
-    
+
     def setup_metrics
+      #
+      # Configure the sidekiq client
+      #
+      Sidekiq.configure_client do |config|
+        config.redis = {
+           namespace: namespace,
+           url: url
+        }
+      end
+
       @total_failed = NewRelic::Processor::EpochCounter.new
       @processed    = NewRelic::Processor::EpochCounter.new
     end
         
-    def poll_cycle
+    def poll_cycle       
       stats = Sidekiq::Stats.new
-      
+  
       Sidekiq::Queue.all.unshift(Sidekiq::Queue.new).each do |sidekiq_queue|
         
         #
@@ -64,7 +75,7 @@ module SidekiqAgent
       #
       # The rate at which jobs failed per second
       #
-      report_metric "Jobs/Rate/Failed", "Jobs/Second", @total_failed.process(stats.failed)
+      report_metric "Jobs/Rate/Failed", "Jobs/Second", @total_failed.process(stats.failed)     
     end
 
   end
